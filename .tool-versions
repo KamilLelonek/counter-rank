@@ -1,0 +1,5 @@
+# https://github.com/elixir-lang/elixir/releases
+elixir 1.13.4
+
+# http://erlang.org/download/otp_versions_tree.html
+erlang 24.3.3
