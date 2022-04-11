@@ -55,7 +55,21 @@ defmodule CounterRank.WorkerTest do
       Worker.incr(@counter2)
       Worker.incr(@counter2)
 
-      assert [{1, [@counter]}, {2, [@counter2]}] = Worker.rank()
+      assert [{2, [@counter2]}, {1, [@counter]}] = Worker.rank()
+    end
+
+    test "should sort rank descending based on counters" do
+      for i <- 1..5, _ <- 1..i do
+        Worker.incr(:"counter#{i}")
+      end
+
+      assert [
+               {5, [:counter5]},
+               {4, [:counter4]},
+               {3, [:counter3]},
+               {2, [:counter2]},
+               {1, [:counter1]}
+             ] = Worker.rank()
     end
   end
 end

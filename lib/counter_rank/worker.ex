@@ -44,7 +44,7 @@ defmodule CounterRank.Worker do
         fn {_key, val} -> val end,
         fn {key, _val} -> key end
       )
-      |> Enum.into([])
+      |> Enum.sort_by(fn {counter, _list} -> counter end, &>=/2)
 
     {:reply, rank, state}
   end
