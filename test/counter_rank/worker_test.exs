@@ -14,4 +14,18 @@ defmodule CounterRank.WorkerTest do
       assert %{counters: %{}, default_counter: ^default_counter} = Worker.state()
     end
   end
+
+  describe "incr/1" do
+    @counter :counter
+
+    test "should increment a nonexisting counter" do
+      assert 1 = Worker.incr(@counter)
+    end
+
+    test "should update an existing counter" do
+      Worker.incr(@counter)
+
+      assert 2 = Worker.incr(@counter)
+    end
+  end
 end

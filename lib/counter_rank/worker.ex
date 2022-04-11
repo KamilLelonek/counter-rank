@@ -23,8 +23,14 @@ defmodule CounterRank.Worker do
   def init([counter]), do: {:ok, initial_state(counter)}
 
   @impl true
-  def handle_call({:incr, counter}, _from, state) do
-    {:reply, state, state}
+  def handle_call(
+        {:incr, counter},
+        _from,
+        %{counters: counters, default_counter: default_counter} = state
+      ) do
+    counters = Map.update(counters, counter, default_counter, &(&1 + 1))
+
+    {:reply, Map.get(counters, counter), %{state | counters: counters}}
   end
 
   defp initial_state(default_counter),
