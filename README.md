@@ -14,6 +14,13 @@
 The exercise consists to implement the `CounterRank.API` behaviour in the best
 possible way, keeping in mind the expected worst case complexity.
 
+## Usage
+
+For the usage see the following files:
+
+* [`api.ex`](lib/counter_rank/api.ex)
+* [worker_test.exs`](test/counter_rank/worker_test.exs)
+
 
 ## Installation
 
