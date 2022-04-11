@@ -44,17 +44,17 @@ defmodule CounterRank.Worker do
     rank =
       state
       |> ranking()
-      |> Enum.sort_by(fn {counter, _list} -> counter end, &>=/2)
+      |> sort_by_counter()
 
     {:reply, rank, state}
   end
 
   @impl true
-  def handle_call(:leaders, _from, %{counters: counters} = state) do
+  def handle_call(:leaders, _from, state) do
     {_counter, leaders} =
       state
       |> ranking()
-      |> Enum.max_by(fn {counter, _leaders} -> counter end, &>=/2, fn -> {nil, []} end)
+      |> max_by_counter()
 
     {:reply, leaders, state}
   end
@@ -69,4 +69,9 @@ defmodule CounterRank.Worker do
       fn {key, _val} -> key end
     )
   end
+
+  defp sort_by_counter(rank), do: Enum.sort_by(rank, fn {counter, _list} -> counter end, &>=/2)
+
+  defp max_by_counter(rank),
+    do: Enum.max_by(rank, fn {counter, _leaders} -> counter end, &>=/2, fn -> {nil, []} end)
 end
