@@ -37,13 +37,10 @@ defmodule CounterRank.Worker do
   end
 
   @impl true
-  def handle_call(:rank, _from, %{counters: counters} = state) do
+  def handle_call(:rank, _from, state) do
     rank =
-      counters
-      |> Enum.group_by(
-        fn {_key, val} -> val end,
-        fn {key, _val} -> key end
-      )
+      state
+      |> ranking()
       |> Enum.sort_by(fn {counter, _list} -> counter end, &>=/2)
 
     {:reply, rank, state}
@@ -51,4 +48,12 @@ defmodule CounterRank.Worker do
 
   defp initial_state(default_counter),
     do: %{@empty_state | default_counter: default_counter}
+
+  defp ranking(%{counters: counters}) do
+    Enum.group_by(
+      counters,
+      fn {_key, val} -> val end,
+      fn {key, _val} -> key end
+    )
+  end
 end
