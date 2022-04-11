@@ -32,7 +32,7 @@ defmodule CounterRank.API do
 
   ## Examples
 
-      iex> MyImpl.rank_leader()
+      iex> MyImpl.leaders()
       [:a]
   """
   @callback leaders :: [counter]
