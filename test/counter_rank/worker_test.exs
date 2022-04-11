@@ -28,4 +28,34 @@ defmodule CounterRank.WorkerTest do
       assert 2 = Worker.incr(@counter)
     end
   end
+
+  describe "rank/0" do
+    @counter2 :counter2
+
+    test "should return an initial rank" do
+      assert [] == Worker.rank()
+    end
+
+    test "should return a rank of a single counter" do
+      range = 4
+      for _ <- 1..range, do: Worker.incr(@counter)
+
+      assert [{^range, [@counter]}] = Worker.rank()
+    end
+
+    test "should return a rank of elements with the same counter" do
+      Worker.incr(@counter)
+      Worker.incr(@counter2)
+
+      assert [{1, [@counter, @counter2]}] = Worker.rank()
+    end
+
+    test "should return a rank of elements with different counters" do
+      Worker.incr(@counter)
+      Worker.incr(@counter2)
+      Worker.incr(@counter2)
+
+      assert [{1, [@counter]}, {2, [@counter2]}] = Worker.rank()
+    end
+  end
 end

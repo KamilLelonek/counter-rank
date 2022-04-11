@@ -13,6 +13,9 @@ defmodule CounterRank.Worker do
   @impl true
   def incr(counter), do: GenServer.call(__MODULE__, {:incr, counter})
 
+  @impl true
+  def rank, do: GenServer.call(__MODULE__, :rank)
+
   def reset, do: :sys.replace_state(pid(), &initial_state(&1.default_counter))
   def state, do: :sys.get_state(pid())
   defp pid, do: Process.whereis(__MODULE__)
@@ -31,6 +34,19 @@ defmodule CounterRank.Worker do
     counters = Map.update(counters, counter, default_counter, &(&1 + 1))
 
     {:reply, Map.get(counters, counter), %{state | counters: counters}}
+  end
+
+  @impl true
+  def handle_call(:rank, _from, %{counters: counters} = state) do
+    rank =
+      counters
+      |> Enum.group_by(
+        fn {_key, val} -> val end,
+        fn {key, _val} -> key end
+      )
+      |> Enum.into([])
+
+    {:reply, rank, state}
   end
 
   defp initial_state(default_counter),
