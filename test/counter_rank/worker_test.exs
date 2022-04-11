@@ -3,6 +3,8 @@ defmodule CounterRank.WorkerTest do
 
   alias CounterRank.Worker
 
+  @counter :counter
+
   setup do
     Worker.reset()
   end
@@ -16,8 +18,6 @@ defmodule CounterRank.WorkerTest do
   end
 
   describe "incr/1" do
-    @counter :counter
-
     test "should increment a nonexisting counter" do
       assert 1 = Worker.incr(@counter)
     end
