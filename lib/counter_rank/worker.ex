@@ -1,6 +1,8 @@
 defmodule CounterRank.Worker do
   use GenServer
 
+  @behaviour CounterRank.API
+
   @empty_state %{counters: %{}, default_counter: nil}
 
   # Client API
