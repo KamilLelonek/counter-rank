@@ -19,7 +19,7 @@ possible way, keeping in mind the expected worst case complexity.
 For the usage see the following files:
 
 * [`api.ex`](lib/counter_rank/api.ex)
-* [worker_test.exs`](test/counter_rank/worker_test.exs)
+* [`worker_test.exs`](test/counter_rank/worker_test.exs)
 
 
 ## Installation
