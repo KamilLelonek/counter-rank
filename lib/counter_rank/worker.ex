@@ -13,6 +13,10 @@ defmodule CounterRank.Worker do
   @impl true
   def incr(counter), do: GenServer.call(__MODULE__, {:incr, counter})
 
+  def reset, do: :sys.replace_state(pid(), &initial_state(&1.default_counter))
+  def state, do: :sys.get_state(pid())
+  defp pid, do: Process.whereis(__MODULE__)
+
   # Server Callbacks
 
   @impl true
