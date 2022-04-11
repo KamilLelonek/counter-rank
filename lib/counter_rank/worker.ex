@@ -16,6 +16,9 @@ defmodule CounterRank.Worker do
   @impl true
   def rank, do: GenServer.call(__MODULE__, :rank)
 
+  @impl true
+  def leaders, do: GenServer.call(__MODULE__, :leaders)
+
   def reset, do: :sys.replace_state(pid(), &initial_state(&1.default_counter))
   def state, do: :sys.get_state(pid())
   defp pid, do: Process.whereis(__MODULE__)
@@ -44,6 +47,16 @@ defmodule CounterRank.Worker do
       |> Enum.sort_by(fn {counter, _list} -> counter end, &>=/2)
 
     {:reply, rank, state}
+  end
+
+  @impl true
+  def handle_call(:leaders, _from, %{counters: counters} = state) do
+    {_counter, leaders} =
+      state
+      |> ranking()
+      |> Enum.max_by(fn {counter, _leaders} -> counter end, &>=/2, fn -> {nil, []} end)
+
+    {:reply, leaders, state}
   end
 
   defp initial_state(default_counter),

@@ -72,4 +72,31 @@ defmodule CounterRank.WorkerTest do
              ] = Worker.rank()
     end
   end
+
+  describe "leaders/0" do
+    test "should not show any leader yes" do
+      assert [] == Worker.leaders()
+    end
+
+    test "should show a single leader" do
+      Worker.incr(@counter)
+
+      assert [@counter] = Worker.leaders()
+    end
+
+    test "should show all leaders" do
+      Worker.incr(@counter)
+      Worker.incr(@counter2)
+
+      assert [@counter, @counter2] = Worker.leaders()
+    end
+
+    test "should show the only leaders" do
+      Worker.incr(@counter)
+      Worker.incr(@counter2)
+      Worker.incr(@counter2)
+
+      assert [@counter2] = Worker.leaders()
+    end
+  end
 end
