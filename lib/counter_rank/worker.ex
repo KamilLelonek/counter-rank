@@ -1,4 +1,8 @@
 defmodule CounterRank.Worker do
+  @moduledoc """
+  A worker representing rank state
+  with all the counters and their values.
+  """
   use GenServer
 
   @behaviour CounterRank.API
